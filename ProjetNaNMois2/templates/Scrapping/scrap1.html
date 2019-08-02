@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container p-4">
+    <h1>Welcome In the Site </h1>
+    <div class="row">
+        <div class="col-md-2 mx-auto">
+                {% comment %} <span>{{row.heure}}</span><br><br>
+                <span><strong>{{row.eqa}}</strong></span>
+                <span>{{result.scors}}</span>
+                <span><strong>{{row.eqb}}</strong></span>
+                <a href="{{row.parie}}">Parie</a> {% endcomment %}
+        </div>
+
+        <div class="col-md-8 mx-auto">
+            
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Heure</th>
+                            <th scope="col">Equipe 1</th>
+                            <th scope="col">Score</th>
+                            <th scope="col">Equipe 2</th>
+                        </tr>
+                    </thead>
+                    {% for row in result %}
+                    <tbody>
+                        <tr>
+                            <th scope="row">{{row.heure}}</th>
+                            <td>{{row.eqa}}</td>
+                            {% if result.scors is None  %}
+                               <td> Non commencé </td>
+                            {% else %}
+                                <td>{{result.scors}}</td>
+                            {% endif %}
+                            
+                            <td>{{row.eqb}}</td>
+                            <td><a href="https://www.matchendirect.fr{{row.parie}}">Parie</a></td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            
+        </div>
+
+        <div class="col-md-2 mx-auto">
+
+        </div>
+
+    </div>
+</div>
+{% endblock content %}

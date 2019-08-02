@@ -1,0 +1,177 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        {% if title %}
+            <title> {{title}} </title>
+        {% else %}
+            <title>Projet Python-Django</title>
+        {% endif %}
+
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/pace-theme-minimal.css' %}">
+              
+    </head>
+    <body class="bagroun">
+
+        <!-- Header -->
+
+        <nav class="navbar navbar-expand-lg navbar-dark bar">
+    <div class="container">
+    <a class="navbar-brand" href="{% url 'scraping' %}">BookMarker</a>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+               	{% if request.user.is_authenticated %}
+					<li class="nav-item p-2">
+						<a class="text-white nav-link" href="{% url 'scraping' %}">Home</a>
+					</li>
+					<li class="nav-item p-2">
+						<a class="text-white nav-link" href="{% url 'pari' %}">MyLuck</a>
+					</li>
+					<li class="nav-item p-2">
+						<a class="text-white nav-link" href="{% url 'account' %}">Account</a>
+					</li>
+					<li class="nav-item dropdown p-2">
+						<a class="nav-link dropdown-toggle font-weight text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Hello, {{request.user.username}}
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="{% url 'logout' %}">Login</a>
+						</div>
+					</li> 
+				{% else %}
+					<li class="nav-item p-2">
+						<a class="text-white nav-link" href="{% url 'scraping' %}">Home</a>
+					</li>
+					<li class="nav-item p-2">
+						<a class="p-2 text-white nav-link" href="{% url 'login' %}">Login</a>
+					</li>
+					<li class="nav-item p-2">
+						<a class="btn btn-outline-dark text-white" href="{% url 'register' %}">Register</a>
+					</li>
+				{% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% comment %} Fin Header {% endcomment %}
+
+
+<div class="container " id="app">
+
+    <h1 class="text-white text-center">Les Matchs au Programme</h1>
+
+    <table class="table table-striped text-white">
+        <thead>
+            <tr>
+                <th scope="col">Heure</th>
+                <th scope="col">Equipe 1</th>
+                <th scope="col">Score</th>
+                <th scope="col">Equipe 2</th>
+                <th scope="col">Parier</th>
+            </tr>
+        </thead>
+
+        <tbody v-for="item in result">
+            <tr>
+                <th scope="row">#{ item.myTime } | #{item.typeMatch}</th>
+                {% comment %} <td>#{ item.equip1 }|<img src="#{item.imageEquip1}" width="16" height="16"></td> {% endcomment %}
+                <td>#{ item.equip1 }</td>
+                <td>#{ item.scorsMatch }</td>
+                <td>#{ item.equip2 }</td>
+                <td><a href="https://www.matchendirect.fr#{ item.parierMatch }" class="btn btn-dark">Parie</a></td>
+            </tr>
+        </tbody>
+
+
+            {% comment %} <li>#{ item.myTime }</li>
+            <li>#{ item.equip1 }</li>
+            <span v-if=" item.scorsMatch === null ">
+                <li>Par en cours</li>
+            </span>
+            <span v-else>
+                <li>#{ item.scorsMatch }</li>
+            </span>
+            <li>#{ item.equip2 }</li>
+            <li><a href="https://www.matchendirect.fr#{ item.parierMatch }">Parie</a></li>			 {% endcomment %}
+        </table>
+    </div>
+
+    <hr>
+    <div class="d-flex flex-row align-items-center footer bg-dark text-white shadow-lg">
+        <p class="m-auto">Projet NaN DJango 2.2.3 | 2019</p>
+    </div>
+    
+    <script src="{% static 'js/pace.min.js' %} "></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+    const app = new Vue({
+        el: "#app",
+        data: {
+            message: '',
+            result : [],
+            base_usl : "http://localhost:8000/scrapper/"
+        },
+        delimiters: ["#{", "}"],
+        mounted: function() {
+        this.get()
+        
+        },
+        methods: {
+
+            get: function(){
+                axios.defaults.xsrfCookieName = 'csrftoken'
+                axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+
+
+                axios.get(this.base_usl)
+                    .then(response => {
+                        resultat = response.data
+                        this.result = resultat
+                        console.log('getting..')
+
+                        //console.log(resultat)
+                        //this.contentA = myshop[0].fields.code_depart
+
+
+                        //console.log(response.data)
+                        //this.loading = false;
+                    })
+                    .catch((err) => {
+                        //this.loading = false;
+                        console.log(err);
+                    })
+            }
+            
+        }
+    });
+
+
+    $(document).ready(function() {
+        setInterval( function(){
+            app.get()
+        }, 30000);
+    });
+
+    </script>
+
+    </body>
+</html>

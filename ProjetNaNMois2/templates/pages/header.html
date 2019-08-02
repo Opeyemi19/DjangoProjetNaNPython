@@ -1,0 +1,65 @@
+{% load staticfiles %}
+
+{# Animation CSS #}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+{# STYLE CSS  #}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+{% comment %} <link rel="stylesheet" href="/css/style.css"> {% endcomment %}
+<link rel="stylesheet" href="{% static 'css/pace-theme-minimal.css' %}">
+
+{% comment %} Font awesone {% endcomment %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% comment %} Bootstrap {% endcomment %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-dark bar">
+    <div class="container">
+    <a class="navbar-brand" href="{% url 'scraping' %}">BookMarker</a>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+               	{% if request.user.is_authenticated %}
+					<li class="nav-item p-2">
+						<a class="text-white nav-link" href="{% url 'scraping' %}">Home</a>
+					</li>
+					<li class="nav-item p-2">
+						<a class="text-white nav-link" href="{% url 'pari' %}">MyLuck</a>
+					</li>
+					<li class="nav-item p-2">
+						<a class="text-white nav-link" href="{% url 'account' %}">Account</a>
+					</li>
+					<li class="nav-item dropdown p-2">
+						<a class="nav-link dropdown-toggle font-weight text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Hello, {{request.user.username}}
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="{% url 'logout' %}">Login</a>
+						</div>
+					</li> 
+				{% else %}
+					<li class="nav-item p-2">
+						<a class="text-white nav-link" href="{% url 'scraping' %}">Home</a>
+					</li>
+					<li class="nav-item p-2">
+						<a class="p-2 text-white nav-link" href="{% url 'login' %}">Login</a>
+					</li>
+					<li class="nav-item p-2">
+						<a class="btn btn-outline-dark text-white" href="{% url 'register' %}">Register</a>
+					</li>
+				{% endif %}				
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+{% comment %}  {% endcomment %}

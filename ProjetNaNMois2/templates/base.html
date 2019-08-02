@@ -1,0 +1,38 @@
+{% comment %} {% load static %} {% endcomment %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    {% if title %}
+        <title> {{title}} </title>
+    {% else %}
+        <title>Projet Python-Django</title>
+    {% endif %}
+
+    {% comment %} Style CSS {% endcomment %}
+    {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'account/style.css' %}"> {% endcomment %}
+
+    {% include 'pages/header.html' %}
+    
+</head>
+
+<body class="bagroun">
+
+ 
+    {% comment %} Debut Body {% endcomment %}
+    <div class="main">
+        {% block content %}
+        
+        {% endblock content %}
+    </div>
+
+    {% comment %} Fin Body {% endcomment %}
+
+
+    {% include 'pages/footer.html' %}    
+</body>
+</html>
